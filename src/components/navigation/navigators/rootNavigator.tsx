@@ -6,7 +6,7 @@ import React, { FC } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackNavParamList } from "navigation/@types";
-import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
+import { Login, Startup } from "screens";
 
 const RootStack = createStackNavigator<RootStackNavParamList>();
 
@@ -15,7 +15,12 @@ export const RootStackNavigator: FC = () => {
         <RootStack.Navigator initialRouteName="Startup">
             <RootStack.Screen
                 name="Startup"
-                component={ReloadInstructions}
+                component={Startup}
+                options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+                name="Login"
+                component={Login}
                 options={{ headerShown: false }}
             />
         </RootStack.Navigator>

@@ -2,6 +2,9 @@ module.exports = {
     root: true,
     extends: "@react-native-community",
     parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 2020,
+    },
     plugins: ["@typescript-eslint", "import"],
     rules: {
         quotes: [1, "double", { avoidEscape: true, allowTemplateLiterals: true }],

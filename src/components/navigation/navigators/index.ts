@@ -3,3 +3,4 @@
  */
 
 export * from "./rootNavigator";
+export * from "./homeNavigator";

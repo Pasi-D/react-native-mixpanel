@@ -1,4 +1,6 @@
-# **React Native Starter Kit** ⚛
+# **React Native Mixpanel Demo** ⚛
+
+Built with [React Native Starter Kit](https://github.com/Pasi-D/React-Native-Starter-Kit)
 
 [![Build status](https://build.appcenter.ms/v0.1/apps/ae81a858-3f4a-470a-b702-e2ec0649d0a6/branches/master/badge)](https://appcenter.ms)
 

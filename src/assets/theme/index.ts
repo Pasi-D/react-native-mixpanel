@@ -12,15 +12,21 @@ interface IExtendedThemeButtonProps extends Partial<ButtonProps> {
         };
         fontFamily?: string;
     };
+    colors?: {
+        startupBtnGradientPrimary?: string;
+        startupBtnGradientSecondary?: string;
+    };
 }
 
 interface IExtendedThemeColorProps extends RecursivePartial<Colors> {
     readonly darkBg: string;
+    readonly startupBGPrimary: string;
+    readonly startupBGSecondary: string;
 }
 
 export interface Theme extends Partial<FullTheme> {
     Button?: IExtendedThemeButtonProps;
-    colors?: IExtendedThemeColorProps;
+    colors?: Partial<IExtendedThemeColorProps>;
 }
 
 export const useThemeContext = () => useContext<ThemeProps<Theme>>(ThemeContext);
@@ -34,9 +40,15 @@ const theme: Theme = {
             },
             fontFamily: "Montserrat",
         },
+        colors: {
+            startupBtnGradientPrimary: "#0AE2E2",
+            startupBtnGradientSecondary: "#697EF9",
+        },
     },
     colors: {
         darkBg: "#0F0F0F",
+        startupBGPrimary: "#062E58",
+        startupBGSecondary: "#041427",
     },
 };
 
