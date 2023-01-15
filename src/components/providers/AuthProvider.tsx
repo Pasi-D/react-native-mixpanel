@@ -1,13 +1,20 @@
-import React, { createContext, FC, ReactNode, useContext, useReducer } from "react";
+import React, {
+    createContext,
+    Dispatch,
+    FC,
+    ReactNode,
+    useContext,
+    useReducer,
+} from "react";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { removeCredentialsFromStorage, saveCredentialsToStorage } from "utils/storage";
 
 interface IAuthState {
     isAuthenticated: boolean;
-    authUserEmail?: string;
+    username?: string;
 }
 
-interface IAuthenticateData {
+export interface IAuthenticateData {
     username: string;
     password: string;
 }
@@ -26,12 +33,14 @@ interface IAuthCtxProps {
      */
     authorize: (credentials: IAuthenticateData) => Promise<void>;
     /**
+     * Update Auth related state data
+     */
+    updateAuthData: (newAuthData: IAuthState) => void | Dispatch<Partial<IAuthState>>;
+    /**
      * Handler function for Logout (token revocation & clearing secure storage data)
      */
     logout: () => void;
 }
-
-const AUTHORIZATION_DATA_STORE_KEY = "AUTH_STORED";
 
 const defaultAuthState: IAuthState = {
     isAuthenticated: false,
@@ -40,6 +49,7 @@ const defaultAuthState: IAuthState = {
 const initialContext: IAuthCtxProps = {
     authData: defaultAuthState,
     authorize: async () => {},
+    updateAuthData: () => {},
     logout: () => {},
 };
 
@@ -58,18 +68,15 @@ const AuthCtxProvider: FC<IAuthProviderProps> = ({ children }) => {
     const [authState, dispatchAuthState] = useReducer(authReducer, defaultAuthState);
 
     const handleLogout = async () => {
-        await AsyncStorage.removeItem(AUTHORIZATION_DATA_STORE_KEY);
+        await removeCredentialsFromStorage();
         dispatchAuthState(defaultAuthState);
     };
 
     const handleAuthorization = async (credentials: IAuthenticateData) => {
-        await AsyncStorage.setItem(
-            AUTHORIZATION_DATA_STORE_KEY,
-            JSON.stringify(credentials),
-        );
+        await saveCredentialsToStorage(credentials);
         dispatchAuthState({
             isAuthenticated: true,
-            authUserEmail: credentials.username,
+            username: credentials.username,
         });
     };
 
@@ -78,6 +85,7 @@ const AuthCtxProvider: FC<IAuthProviderProps> = ({ children }) => {
             value={{
                 authData: authState,
                 authorize: handleAuthorization,
+                updateAuthData: dispatchAuthState,
                 logout: handleLogout,
             }}>
             {children}

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { normalize } from "react-native-elements";
-import { moderateScale } from "react-native-size-matters";
+import { ms } from "react-native-size-matters";
 import { Theme } from "themes";
 
 const styles = (theme: Theme) =>
@@ -18,8 +18,8 @@ const styles = (theme: Theme) =>
             width: "100%",
         },
         loginButton: {
-            width: moderateScale(160),
-            height: moderateScale(40),
+            width: ms(160),
+            height: ms(40),
             borderRadius: 30,
         },
         loginButtonText: {
@@ -42,8 +42,8 @@ const styles = (theme: Theme) =>
         },
         versionNumberWrapper: {
             alignSelf: "flex-end",
-            paddingBottom: moderateScale(5),
-            paddingRight: moderateScale(5),
+            paddingBottom: ms(5),
+            paddingRight: ms(5),
         },
         versionText: {
             color: theme.Button?.titleAppearances?.titleColors?.primary,

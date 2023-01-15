@@ -16,3 +16,7 @@ export type RootStackNavProps<T extends keyof RootStackNavParamList> = {
 export type HomeStackNavParamList = {
     Home: undefined;
 };
+
+export type HomeStackNavProps<T extends keyof HomeStackNavParamList> = {
+    navigation: StackNavigationProp<HomeStackNavParamList, T>;
+};

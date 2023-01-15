@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { moderateScale } from "react-native-size-matters";
+import { ms } from "react-native-size-matters";
 import { Theme } from "themes";
 
 const styles = (theme: Theme) =>
@@ -15,7 +15,7 @@ const styles = (theme: Theme) =>
             flex: 3,
             justifyContent: "center",
             alignItems: "center",
-            marginHorizontal: moderateScale(10),
+            marginHorizontal: ms(10),
         },
         loginFieldText: {
             color: "white",
