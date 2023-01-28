@@ -18,16 +18,16 @@ const styles = (theme: Theme) =>
             alignItems: "center",
             marginHorizontal: ms(10),
         },
-        loginFieldText: {
+        signupFieldText: {
             color: "white",
         },
-        loginButtonStyle: {
+        signupButtonStyle: {
             borderRadius: 30,
         },
         rootContainer: {
             flex: 1,
         },
-        signUpText: {
+        loginText: {
             color: theme.colors?.primary,
             marginTop: mvs(15),
             fontSize: normalize(15),

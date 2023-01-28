@@ -15,6 +15,9 @@ interface IExtendedThemeButtonProps extends Partial<ButtonProps> {
     colors?: {
         startupBtnGradientPrimary?: string;
         startupBtnGradientSecondary?: string;
+        primary?: string;
+        secondary?: string;
+        alert?: string;
     };
 }
 
@@ -43,6 +46,9 @@ const theme: Theme = {
         colors: {
             startupBtnGradientPrimary: "#0AE2E2",
             startupBtnGradientSecondary: "#697EF9",
+            primary: "#2089dc",
+            secondary: "#2189dc",
+            alert: "#f44336",
         },
     },
     colors: {

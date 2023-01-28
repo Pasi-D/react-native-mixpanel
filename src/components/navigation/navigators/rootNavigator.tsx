@@ -6,7 +6,7 @@ import React, { FC } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackNavParamList } from "navigation/@types";
-import { Login, Startup } from "screens";
+import { Login, Signup, Startup } from "screens";
 
 const RootStack = createStackNavigator<RootStackNavParamList>();
 
@@ -21,6 +21,11 @@ export const RootStackNavigator: FC = () => {
             <RootStack.Screen
                 name="Login"
                 component={Login}
+                options={{ headerShown: false }}
+            />
+            <RootStack.Screen
+                name="Signup"
+                component={Signup}
                 options={{ headerShown: false }}
             />
         </RootStack.Navigator>

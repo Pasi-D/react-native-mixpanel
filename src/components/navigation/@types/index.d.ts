@@ -7,6 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 export type RootStackNavParamList = {
     Startup: undefined;
     Login: undefined;
+    Signup: undefined;
 };
 
 export type RootStackNavProps<T extends keyof RootStackNavParamList> = {

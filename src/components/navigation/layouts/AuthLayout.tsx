@@ -24,7 +24,7 @@ const AuthLayout: FC<IAuthLayoutProps> = () => {
         } catch (error) {
             console.log("error :", error);
             setLoading(false);
-            Toast.show("Keychain couldn't be accessed !", {
+            Toast.show("Error in authentication !", {
                 duration: Toast.durations.SHORT,
                 position: Toast.positions.BOTTOM,
                 delay: 0,

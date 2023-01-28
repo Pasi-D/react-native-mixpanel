@@ -1,5 +1,5 @@
 /**
- * Login screen
+ * Signup screen
  */
 
 import React, { FC, useState } from "react";
@@ -8,23 +8,26 @@ import { TouchableWithoutFeedback, View } from "react-native";
 import { Button, Input, Text } from "components/atoms";
 import { useAuthContext } from "components/providers/AuthProvider";
 import { RootStackNavProps } from "navigation/@types";
+import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { useThemeContext } from "themes";
 
-import useStyles from "./login.style";
+import useStyles from "./signup.style";
 
-interface ILoginProps extends RootStackNavProps<"Login"> {}
+interface ISignupProps extends RootStackNavProps<"Signup"> {}
 
-const Login: FC<ILoginProps> = ({ navigation }) => {
+const Signup: FC<ISignupProps> = ({ navigation }) => {
     const { theme } = useThemeContext();
     const styles = useStyles(theme);
 
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
     const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [password, setPassword] = useState("");
 
     const { authorize } = useAuthContext();
 
-    const onPressLogin = async () => {
+    const onPressSignup = async () => {
         if (!username && !password) {
             return;
         }
@@ -34,9 +37,11 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
         });
     };
 
-    const onPressSignup = () => {
-        navigation.navigate("Signup");
+    const onPressLogin = () => {
+        navigation.navigate("Login");
     };
+
+    const isSignUpButtonDisabled = !fullName || !email || !username || !password;
 
     return (
         <View style={styles.rootContainer}>
@@ -51,15 +56,29 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
                 locations={[0.05, 0.95]}>
                 <View style={styles.loginFieldsWrapper}>
                     <Input
+                        placeholder="Full name"
+                        inputStyle={styles.signupFieldText}
+                        onChangeText={txt => setFullName(txt)}
+                        value={fullName}
+                        label={"Full Name"}
+                    />
+                    <Input
+                        placeholder="email"
+                        inputStyle={styles.signupFieldText}
+                        onChangeText={txt => setEmail(txt)}
+                        value={email}
+                        label={"Email"}
+                    />
+                    <Input
                         placeholder="username"
-                        inputStyle={styles.loginFieldText}
+                        inputStyle={styles.signupFieldText}
                         onChangeText={txt => setUsername(txt)}
                         value={username}
                         label={"Username"}
                     />
                     <Input
-                        placeholder="password"
-                        inputStyle={styles.loginFieldText}
+                        placeholder="Password"
+                        inputStyle={styles.signupFieldText}
                         onChangeText={txt => setPassword(txt)}
                         value={password}
                         secureTextEntry={true}
@@ -67,15 +86,15 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
                         label={"Password"}
                     />
                     <Button
-                        title={"Login"}
+                        title={"Sign Up"}
                         type="solid"
-                        containerStyle={styles.loginButtonStyle}
-                        onPress={onPressLogin}
-                        disabled={!username || !password}
+                        containerStyle={styles.signupButtonStyle}
+                        onPress={onPressSignup}
+                        disabled={isSignUpButtonDisabled}
                     />
-                    <TouchableWithoutFeedback onPress={onPressSignup}>
-                        <Text style={styles.signUpText}>
-                            Don't have an account ? Signup
+                    <TouchableWithoutFeedback onPress={onPressLogin}>
+                        <Text style={styles.loginText}>
+                            Already have an account ? Login
                         </Text>
                     </TouchableWithoutFeedback>
                 </View>
@@ -84,4 +103,4 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
     );
 };
 
-export default Login;
+export default Signup;
