@@ -73,11 +73,15 @@ const AuthCtxProvider: FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const handleAuthorization = async (credentials: IAuthenticateData) => {
-        await saveCredentialsToStorage(credentials);
-        dispatchAuthState({
-            isAuthenticated: true,
-            username: credentials.username,
-        });
+        try {
+            await saveCredentialsToStorage(credentials);
+            dispatchAuthState({
+                isAuthenticated: true,
+                username: credentials.username,
+            });
+        } catch (error) {
+            throw error;
+        }
     };
 
     return (

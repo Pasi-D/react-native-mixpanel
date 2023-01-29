@@ -7,6 +7,7 @@ import { HomeStackNavProps } from "navigation/@types";
 import ImagePicker, { Image } from "react-native-image-crop-picker";
 import Toast from "react-native-root-toast";
 import { useThemeContext } from "themes";
+import { EventPropertyNames, EventsTracked, useMixpanel } from "utils/analytics";
 
 import useStyles from "./imageAnalyzer.style";
 
@@ -14,30 +15,49 @@ interface ImageAnalyzerProps extends HomeStackNavProps<"Home"> {}
 
 const placeHolderImage = require("assets/images/portrait-placeholder.jpg");
 
+const ANALYZED_RESULTS = ["Not Hot Dog", "Hot Dog"];
+
 const ImageAnalyzer: FC<ImageAnalyzerProps> = () => {
     const { theme } = useThemeContext();
     const styles = useStyles(theme);
 
     const { logout } = useAuthContext();
+    const { mixpanel } = useMixpanel();
 
     const [image, setImage] = useState<ImageURISource | null>(null);
     const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
     const onPressUpload = () => {
+        mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+            [EventPropertyNames.UPLOAD_BUTTON_PRESSED]: true,
+        });
         ImagePicker.openPicker({
             width: 300,
             height: 400,
             cropping: true,
-        }).then(img => {
-            setImage({
-                uri: (img as Image).path,
-                width: (img as Image).width,
-                height: (img as Image).height,
+        })
+            .then(img => {
+                setImage({
+                    uri: (img as Image).path,
+                    width: (img as Image).width,
+                    height: (img as Image).height,
+                });
+                mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+                    [EventPropertyNames.UPLOAD_METHOD]: "Storage",
+                });
+            })
+            .catch(error => {
+                console.log("error", error?.message);
+                mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+                    [EventPropertyNames.CANCELLED_UPLOAD_BUTTON_PRESS]: true,
+                });
             });
-        });
     };
 
     const onCameraPress = () => {
+        mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+            [EventPropertyNames.CAMERA_BUTTON_PRESSED]: true,
+        });
         ImagePicker.openCamera({
             width: 300,
             height: 400,
@@ -49,9 +69,15 @@ const ImageAnalyzer: FC<ImageAnalyzerProps> = () => {
                     width: (img as Image).width,
                     height: (img as Image).height,
                 });
+                mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+                    [EventPropertyNames.UPLOAD_METHOD]: "Back Camera",
+                });
             })
             .catch(error => {
                 console.log("error", error?.message);
+                mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+                    [EventPropertyNames.CANCELLED_CAMERA_BUTTON_PRESS]: true,
+                });
             });
     };
 
@@ -79,6 +105,26 @@ const ImageAnalyzer: FC<ImageAnalyzerProps> = () => {
 
     const onCancelLogout = () => {
         setIsLogoutModalVisible(false);
+    };
+
+    const onPressAnalyze = () => {
+        const preDeterminedTime = Math.floor(Math.random() * 10000);
+        setTimeout(() => {
+            const randomBinary = Math.round(Math.random());
+            Toast.show(ANALYZED_RESULTS[randomBinary], {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.CENTER,
+                delay: 0,
+                backgroundColor: randomBinary ? "green" : "red",
+                animation: true,
+                hideOnPress: true,
+                shadow: true,
+            });
+            mixpanel?.track(EventsTracked.ANALYZE_IMAGE, {
+                [EventPropertyNames.IS_ANALYZE_SUCCESS]: true,
+                [EventPropertyNames.TIME_FOR_ANALYZE]: preDeterminedTime,
+            });
+        }, preDeterminedTime);
     };
 
     return (
@@ -140,6 +186,14 @@ const ImageAnalyzer: FC<ImageAnalyzerProps> = () => {
                     />
                 </View>
                 <View style={styles.pageBottom}>
+                    <View style={styles.analyzeButtonWrapper}>
+                        <Button
+                            title={"Analyze"}
+                            onPress={onPressAnalyze}
+                            type="solid"
+                            disabled={!image}
+                        />
+                    </View>
                     <View style={styles.logoutButtonWrapper}>
                         <Button
                             title={"Logout"}

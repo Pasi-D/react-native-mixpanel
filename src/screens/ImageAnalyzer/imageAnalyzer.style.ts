@@ -8,6 +8,11 @@ const { height } = Dimensions.get("window");
 
 const styles = (theme: Theme) =>
     StyleSheet.create({
+        analyzeButtonWrapper: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+        },
         cameraButton: {
             height: height / 6,
             width: height / 6,
@@ -57,6 +62,7 @@ const styles = (theme: Theme) =>
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
+            marginTop: mvs(10),
         },
         modalView: {
             display: "flex",

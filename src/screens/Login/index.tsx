@@ -10,6 +10,7 @@ import { useAuthContext } from "components/providers/AuthProvider";
 import { RootStackNavProps } from "navigation/@types";
 import LinearGradient from "react-native-linear-gradient";
 import { useThemeContext } from "themes";
+import { EventPropertyNames, EventsTracked, useMixpanel } from "utils/analytics";
 
 import useStyles from "./login.style";
 
@@ -23,6 +24,7 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
     const [password, setPassword] = useState<string>("");
 
     const { authorize } = useAuthContext();
+    const { mixpanel, identifyMixpanelUser } = useMixpanel();
 
     const onPressLogin = async () => {
         if (!username && !password) {
@@ -31,7 +33,19 @@ const Login: FC<ILoginProps> = ({ navigation }) => {
         await authorize({
             username,
             password,
-        });
+        })
+            .then(() => {
+                identifyMixpanelUser({ username });
+                mixpanel?.track(EventsTracked.LOGIN, {
+                    [EventPropertyNames.LOGIN_SUCCESSFUL]: true,
+                });
+            })
+            .catch(err => {
+                mixpanel?.track(EventsTracked.LOGIN, {
+                    [EventPropertyNames.LOGIN_SUCCESSFUL]: false,
+                    [EventPropertyNames.LOGIN_ERROR]: err.message,
+                });
+            });
     };
 
     const onPressSignup = () => {

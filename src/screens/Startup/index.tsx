@@ -10,6 +10,7 @@ import { RootStackNavProps } from "navigation/@types";
 import { Text } from "react-native-elements";
 import LinearGradient from "react-native-linear-gradient";
 import { useThemeContext } from "themes";
+import { EventsTracked, useMixpanel } from "utils/analytics";
 import { getAppVersionName } from "utils/core";
 
 import useStyles from "./startup.style";
@@ -23,6 +24,7 @@ const Startup: FC<IStartupProps> = ({ navigation }) => {
     const headerOpacity = useRef(new Animated.Value(0)).current;
 
     const versionName = getAppVersionName();
+    const { mixpanel } = useMixpanel();
 
     useEffect(() => {
         Animated.timing(headerOpacity, {
@@ -30,7 +32,10 @@ const Startup: FC<IStartupProps> = ({ navigation }) => {
             duration: 1800,
             useNativeDriver: true,
         }).start();
-    }, [headerOpacity]);
+        return () => {
+            mixpanel?.track(EventsTracked.WELCOME, {});
+        };
+    }, [headerOpacity, mixpanel]);
 
     const navigateToLogin = () => {
         navigation.navigate("Login");

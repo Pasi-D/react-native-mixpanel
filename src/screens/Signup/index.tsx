@@ -8,9 +8,9 @@ import { TouchableWithoutFeedback, View } from "react-native";
 import { Button, Input, Text } from "components/atoms";
 import { useAuthContext } from "components/providers/AuthProvider";
 import { RootStackNavProps } from "navigation/@types";
-import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { useThemeContext } from "themes";
+import { EventPropertyNames, EventsTracked, useMixpanel } from "utils/analytics";
 
 import useStyles from "./signup.style";
 
@@ -26,6 +26,7 @@ const Signup: FC<ISignupProps> = ({ navigation }) => {
     const [password, setPassword] = useState("");
 
     const { authorize } = useAuthContext();
+    const { mixpanel, identifyMixpanelUser } = useMixpanel();
 
     const onPressSignup = async () => {
         if (!username && !password) {
@@ -34,7 +35,19 @@ const Signup: FC<ISignupProps> = ({ navigation }) => {
         await authorize({
             username,
             password,
-        });
+        })
+            .then(() => {
+                mixpanel?.track(EventsTracked.SIGN_UP, {
+                    [EventPropertyNames.SIGNUP_SUCCESSFUL]: true,
+                });
+                identifyMixpanelUser({ username });
+            })
+            .catch(err => {
+                mixpanel?.track(EventsTracked.SIGN_UP, {
+                    [EventPropertyNames.SIGNUP_SUCCESSFUL]: false,
+                    [EventPropertyNames.SIGNUP_ERROR]: err.message,
+                });
+            });
     };
 
     const onPressLogin = () => {
