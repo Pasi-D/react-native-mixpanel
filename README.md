@@ -4,7 +4,7 @@ Built with [React Native Starter Kit](https://github.com/Pasi-D/React-Native-Sta
 
 [![Build status](https://build.appcenter.ms/v0.1/apps/ae81a858-3f4a-470a-b702-e2ec0649d0a6/branches/master/badge)](https://appcenter.ms)
 
-A react native starter kit build with [React Native Elements](https://reactnativeelements.com/)
+Refer tracking plan created for this https://docs.google.com/spreadsheets/d/1SWvPKH7eciMErYimXntE65_Lf_zEAFu73HKJ34x8iFc/edit?usp=sharing
 
 > ## Table of content
 
